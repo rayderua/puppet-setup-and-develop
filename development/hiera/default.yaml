@@ -1,7 +1,6 @@
 ---
 classes:
   - puppet
-  #  - custommodule
 puppet::server: false
 puppet::agent: true
 puppet::agent_server_hostname: 'puppet.local'
