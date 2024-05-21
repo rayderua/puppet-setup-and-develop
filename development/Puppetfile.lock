@@ -1,0 +1,22 @@
+FORGE
+  remote: https://forgeapi.puppetlabs.com
+  specs:
+    puppet-extlib (7.0.0)
+      puppetlabs-stdlib (>= 4.18.0, < 10.0.0)
+    puppet-systemd (7.0.0)
+      puppetlabs-inifile (>= 1.6.0, < 7.0.0)
+      puppetlabs-stdlib (>= 8.5.0, < 10.0.0)
+    puppetlabs-concat (9.0.2)
+      puppetlabs-stdlib (>= 9.0.0, < 10.0.0)
+    puppetlabs-inifile (6.1.1)
+      puppetlabs-stdlib (>= 4.13.0, < 10.0.0)
+    puppetlabs-stdlib (9.6.0)
+    theforeman-puppet (19.2.0)
+      puppet-extlib (>= 3.0.0, < 8.0.0)
+      puppet-systemd (>= 2.9.0, < 8.0.0)
+      puppetlabs-concat (>= 4.1.0, < 10.0.0)
+      puppetlabs-stdlib (>= 9.0.0, < 10.0.0)
+
+DEPENDENCIES
+  theforeman-puppet (= 19.2.0)
+

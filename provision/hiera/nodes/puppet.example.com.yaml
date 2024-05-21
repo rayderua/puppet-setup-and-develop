@@ -1,0 +1,40 @@
+---
+classes:
+  - puppet
+  - puppetdb
+  - puppet::server::puppetdb
+
+# postgres
+postgresql::globals::encoding: 'UTF-8'
+postgresql::globals::locale: 'en_US.UTF-8'
+postgresql::globals::manage_package_repo: true
+postgresql::server::listen_addresses: 'localhost'
+
+# puppet agent
+puppet::agent_server_hostname: "%{::trusted.certname}"
+puppet::agent_additional_settings:
+  include_legacy_facts: true
+  server: "%{::trusted.certname}"
+
+# puppet server
+puppet::certname: "%{::trusted.certname}"
+puppet::server: true
+puppet::dns_alt_names: ["%{::trusted.certname}", "localhost"]
+puppet::server_foreman: false
+puppet::server_reports: 'store,puppetdb'
+puppet::server_external_nodes: ''
+puppet::server_storeconfigs: true
+
+puppet::autosign: '/etc/puppetlabs/puppetserver/autosign.conf'
+puppet::autosign_entries: []
+
+# puppetdb
+puppet::server::puppetdb::server: localhost
+puppet::server::puppetdb::port: 8081
+
+puppetdb::manage_dbserver: true
+puppetdb::postgres_version: '16'
+puppetdb::database_password: 'puppetdb'
+puppetdb::ssl_listen_address: 'localhost'
+
+

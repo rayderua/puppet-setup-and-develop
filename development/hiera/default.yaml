@@ -1,0 +1,11 @@
+---
+classes:
+  - puppet
+  #  - custommodule
+puppet::server: false
+puppet::agent: true
+puppet::agent_server_hostname: 'puppet.local'
+puppet::agent_additional_settings:
+  include_legacy_facts: true
+
+
