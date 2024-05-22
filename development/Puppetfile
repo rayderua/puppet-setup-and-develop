@@ -1,5 +1,0 @@
-forge 'https://forgeapi.puppetlabs.com'
-
-mod 'theforeman-puppet',        '19.2.0'
-
-

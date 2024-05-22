@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+$SERVER_MEM = 4096
+$SERVER_CPU = 4
+
+$AGENT_MEM = 1024
+$AGENT_CPU = 1
+
 $INSTALL_PUPPET_AGENT = <<SCRIPT
 #!/bin/bash
 set -e
@@ -77,14 +83,14 @@ Vagrant.configure("2") do |config|
         s.inline = $INSTALL_PUPPET_AGENT
     end
 
-    config.vm.provision "puppet", run: "always" do |puppet|
-        puppet.manifests_path = "provision/manifests"
-        puppet.module_path = "provision/modules"
-        puppet.hiera_config_path = "provision/hiera.yaml"
+    config.vm.provision "puppet-init", type: "puppet", run: "once" do |puppet|
+        puppet.manifests_path = "manifests"
+        puppet.module_path = "modules"
+        puppet.hiera_config_path = "hiera.yaml"
         puppet.working_directory = "/tmp/vagrant-puppet"
         puppet.synced_folder_type = "rsync"
     end
-    config.vm.synced_folder "provision/hiera", "/tmp/vagrant-puppet/hiera",  type: "rsync", rsync__auto: true
+    config.vm.synced_folder "hiera", "/tmp/vagrant-puppet/hiera",  type: "rsync", rsync__auto: true
 
     # Setup puppet server
     config.vm.define "server", autostart: true do | server |
@@ -95,14 +101,16 @@ Vagrant.configure("2") do |config|
         server.vm.network :private_network, type: "dhcp"
         server.vm.provider "virtualbox" do |v|
             v.name  = "puppet-server"
-            v.memory = 2048
-            v.cpus = 2
+            v.memory = $SERVER_MEM
+            v.cpus = $SERVER_CPU
             v.destroy_unused_network_interfaces = true
         end
 
-        server.vm.synced_folder "development", "/etc/puppetlabs/code/environments/production",
+        server.vm.synced_folder ".", "/etc/puppetlabs/code/environments/production",
+            disabled: false,
             type: "rsync",
-            rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--delete", "-z"]
+            rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--delete", "-z"],
+            rsync__exclude: ".git/,.gitignore/,.idea/,.vagrant/,.librarian/,.tmp/,README.md,Vagrantfile"
     end
 
     config.vm.define "agent-buster", autostart: false do |agent|
@@ -111,8 +119,8 @@ Vagrant.configure("2") do |config|
         agent.vm.network :private_network, type: "dhcp"
         agent.vm.provider "virtualbox" do |v|
             v.name = "puppet-agent-buster"
-            v.memory = 1024
-            v.cpus = 1
+            v.memory = $AGENT_MEM
+            v.cpus = $AGENT_CPU
         end
     end
 
@@ -122,8 +130,8 @@ Vagrant.configure("2") do |config|
         agent.vm.network :private_network, type: "dhcp"
         agent.vm.provider "virtualbox" do |v|
             v.name = "puppet-agent-bullseye"
-            v.memory = 1024
-            v.cpus = 1
+            v.memory = $AGENT_MEM
+            v.cpus = $AGENT_CPU
         end
     end
 
@@ -133,8 +141,8 @@ Vagrant.configure("2") do |config|
         agent.vm.network :private_network, type: "dhcp"
         agent.vm.provider "virtualbox" do |v|
             v.name = "puppet-agent-bookworm"
-            v.memory = 1024
-            v.cpus = 1
+            v.memory = $AGENT_MEM
+            v.cpus = $AGENT_CPU
         end
     end
 
@@ -144,8 +152,8 @@ Vagrant.configure("2") do |config|
         agent.vm.network :private_network, type: "dhcp"
         agent.vm.provider "virtualbox" do |v|
             v.name = "puppet-agent-noble"
-            v.memory = 1024
-            v.cpus = 1
+            v.memory = $AGENT_MEM
+            v.cpus = $AGENT_CPU
         end
     end
 
@@ -155,8 +163,8 @@ Vagrant.configure("2") do |config|
         agent.vm.network :private_network, type: "dhcp"
         agent.vm.provider "virtualbox" do |v|
             v.name = "puppet-agent-jammy"
-            v.memory = 1024
-            v.cpus = 1
+            v.memory = $AGENT_MEM
+            v.cpus = $AGENT_CPU
         end
     end
 
@@ -166,8 +174,8 @@ Vagrant.configure("2") do |config|
         agent.vm.network :private_network, type: "dhcp"
         agent.vm.provider "virtualbox" do |v|
             v.name = "puppet-agent-focal"
-            v.memory = 1024
-            v.cpus = 1
+            v.memory = $AGENT_MEM
+            v.cpus = $AGENT_CPU
         end
     end
 end

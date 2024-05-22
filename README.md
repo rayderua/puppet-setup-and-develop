@@ -1,35 +1,22 @@
-# Puppet server install and development
+# project possibilities
+- ### Install puppetserver on your server 
+- ### Develop puppet modules by running server/agent via vagrant
 
-### With this project you can
-- Install puppetserver on your server 
-- Develop puppet modules by running server/agent via vagrant
-
-### Structure
+## Structure
 ```bash
-# Directory for testing manifests, modules, etc. on agent nodes.
-# Will be synced to /etc/puppetlabs/code/encironments/production direcoty on puppetserver virtual machine
-├── development                   
-│   ├── hiera
-│   ├── hiera.yaml
-│   ├── manifests
-│   ├── modules
-│   ├── Puppetfile
-│   └── Puppetfile.lock
-# Puppet environment for provision local environment virtual machanes via vagrant
-# Or provision puppetserver/puppetdb/postgresql on you current server  
-├── provision
-│   ├── hiera
-│   ├── hiera.yaml
-│   ├── manifests
-│   ├── modules
-│   ├── Puppetfile
-│   └── Puppetfile.lock
-├── README.md
-# Config for provision local environment
-└── Vagrantfile
+├── hiera             # hiera data directory
+├── hiera.yaml        # hiera config
+├── manifests         # puppet manifests 
+├── modules           # puppet modules
+├── Puppetfile        # librarian-puppet config (or r10k) 
+├── Puppetfile.lock   # librarian-puppet lock file
+├── README.md         # Readme
+└── Vagrantfile       # vagrant config
 ```
+These files will be synced to /etc/puppetlabs/code/environments/production/ on puppetserver
 
-### Deploy pupeptserver on server
+## Install puppetserver on your server
+
 1. Install puppet-agent
 ```bash
 # Get os codename
@@ -56,20 +43,20 @@ sudo apt-get install -y -qqq puppet-agent -o DPkg::Options::="--force-confold"
 
 2. Create hiera config for your server from example ()
 ```bash
-cp provision/hiera/nodes/puppet.example.com.yaml provision/hiera/nodes/<YOUR_PUPPET_SERVER_FQDN>.yaml
+cp hiera/nodes/puppet.example.com.yaml hiera/nodes/<YOUR_PUPPET_SERVER_FQDN>.yaml
 ```
 
 3. Change the settings as you wish, for example the postgresql settings
 ```bash
-nano provision/hiera/nodes/<YOUR_PUPPET_SERVER_FQDN>.yaml
+nano hiera/nodes/<YOUR_PUPPET_SERVER_FQDN>.yaml
 ```
 
 4. Install. By default will be installed: puppetserver, puppetdb, postgresql-16 
 ```bash
-puppet apply --certname <YOUR_PUPPET_SERVER_FQDN> --modulepath provision/modules --hiera_config provision/hiera.yaml provision/manifests/default.pp
+puppet apply --certname <YOUR_PUPPET_SERVER_FQDN> --modulepath modules --hiera_config hiera.yaml manifests/default.pp
 ```
 
-5. Sync your envoronments to /etc/puppetlabs/code/environments
+5. Sync your envoronments config (e.g. from git) to /etc/puppetlabs/code/environments
 
 Done! 
 
@@ -100,4 +87,3 @@ vagrant rsync server
 ```bash
 vagrant ssh agent-buster -c 'sudo puppet agent -t'
 ```
- 
