@@ -1,4 +1,10 @@
-.idea
-.vagrant
-.librarian
-development/**
+/.idea
+/.vagrant
+/.librarian
+/hiera.yaml
+/hiera
+/manifests
+/modules
+/Puppetfile
+/Puppetfile.lock
+
