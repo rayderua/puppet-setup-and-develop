@@ -1,10 +1,10 @@
-/.idea
-/.vagrant
-/.librarian
-/hiera.yaml
-/hiera
-/manifests
-/modules
-/Puppetfile
-/Puppetfile.lock
+.idea
+.vagrant
+.librarian
+hiera.yaml
+hiera/**
+manifests/**
+modules/**
+Puppetfile
+Puppetfile.lock
 
